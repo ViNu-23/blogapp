@@ -66,7 +66,7 @@ export default function HomePage() {
                     <div className="h-10 w-10 rounded-lg">
                       <img
                         className="rounded-lg object-cover h-full w-full"
-                        src="https://cdn-icons-png.flaticon.com/512/168/168726.png"
+                        src={post.owner.avatar}
                         alt="img"
                       />
                     </div>
