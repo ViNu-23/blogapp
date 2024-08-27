@@ -7,7 +7,6 @@ import { format } from "date-fns";
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  console.log(posts);
 
   useEffect(() => {
     axios
