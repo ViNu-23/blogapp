@@ -99,7 +99,7 @@ export default function SignupPage() {
             value={name}
             name="name"
             placeholder="John Doe"
-            className="w-full px-4 py-2 rounded-lg bg-gray-100 bg-opacity-10"
+            className="w-full px-4 py-2 rounded-lg bg-gray-500 bg-opacity-10 placeholder:italic placeholder:text-gray-600"
             required
             onChange={(e) => setName(e.target.value)}
           />
@@ -117,7 +117,7 @@ export default function SignupPage() {
             value={email}
             name="email"
             placeholder="yourmail@gmail.com"
-            className="w-full px-4 py-2 rounded-lg bg-gray-100 bg-opacity-10"
+            className="w-full px-4 py-2 rounded-lg bg-gray-500 bg-opacity-10 placeholder:italic placeholder:text-gray-600"
             required
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -134,10 +134,10 @@ export default function SignupPage() {
             name="Country"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg bg-gray-100 bg-opacity-10"
+            className="w-full px-4 py-2 rounded-lg bg-gray-500 bg-opacity-10 "
             required
           >
-            <option value="" className="text-gray-600">
+            <option value="" className="text-gray-600 italic">
               Select your country
             </option>
             {countryOptions.map((country) => (
@@ -164,7 +164,7 @@ export default function SignupPage() {
             value={password}
             name="password"
             placeholder="*******"
-            className="w-full px-4 py-2 rounded-lg bg-gray-100 bg-opacity-10"
+            className="w-full px-4 py-2 rounded-lg bg-gray-500 bg-opacity-10 placeholder:italic placeholder:text-gray-600"
             required
             onChange={(e) => setPassword(e.target.value)}
           />

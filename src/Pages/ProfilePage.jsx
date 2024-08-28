@@ -32,8 +32,8 @@ export default function ProfilePage() {
       });
   };
 
-  const handleLogout = () => {
-    axios
+  const handleLogout = async() => {
+    await axios
       .post("/logout", {})
       .then((response) => {
         if (response.status === 200) {

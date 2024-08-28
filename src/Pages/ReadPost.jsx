@@ -6,11 +6,11 @@ import { format } from "date-fns";
 export default function ReadPost() {
   const { id } = useParams();
   const [post, setPost] = useState();
-  useEffect(() => {
+   useEffect(() => {
     axios.get(`/readpost/${id}`).then((response) => {
       setPost(response.data);
     });
-  });
+  },[]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -45,7 +45,7 @@ export default function ReadPost() {
             </h1>
           </div>
           <div>
-            <p>{post.description}</p>
+            <div dangerouslySetInnerHTML={{ __html: post.description }}/>
           </div>
           <div className="my-6 flex justify-between">
             <div className="flex gap-4 items-center">
