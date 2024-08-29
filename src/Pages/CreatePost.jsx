@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
@@ -11,6 +13,20 @@ export default function CreatePost() {
   const [previewPic, setPreviewPic] = useState("");
   const [loading, setLoading] = useState(false);
   const [deletingPost, setDeletingPost] = useState(false);
+
+  function popupNotification(message,type) {
+    return toast[type](message, {
+      position: "bottom-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  }
 
   const handleFileChange = async (event) => {
     event.preventDefault();
@@ -63,17 +79,21 @@ export default function CreatePost() {
         description,
       });
       if (response.status === 200) {
-        // Clear input fields after successful submission
+        popupNotification(response.data,'success')
         setTitle("");
         setCategory("");
         setDescription("");
         setPreviewPic("");
-        console.log(response.data);
+        console.log("response from /createpost",response.data);
       } else {
-        console.log('Not created');
+        console.log('Else from /createpost');
+        popupNotification('Post not created','error')
+
       }
     } catch (error) {
-      console.log(error);
+      console.log('error from /createpost',error);
+      popupNotification(error,'error')
+
     }
   };
 
@@ -180,6 +200,7 @@ export default function CreatePost() {
           </button>
         </div>
       </form>
+      <ToastContainer/>
     </div>
   );
 }

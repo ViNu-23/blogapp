@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ReloadPage from "./ReloadPage";
 import { format } from "date-fns";
+import { TbWifiOff } from "react-icons/tb";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -100,7 +101,10 @@ export default function HomePage() {
             </Link>
           ))
         ) : (
-          <p>No posts available.</p>
+          <div className="flex-col justify-center  items-center">
+            <h1 className="flex justify-center"><TbWifiOff size={30}/></h1>
+            <p>Lost connection !</p>
+            </div>
         )}
       </div>
     </div>

@@ -1,11 +1,28 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // eslint-disable-next-line react/prop-types
 export default function OtpValidation({ email }) {
   const [otp, setOtp] = useState();
   const navigate = useNavigate();
+
+  function popupNotification(message) {
+    return toast.info(message, {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,7 +36,8 @@ export default function OtpValidation({ email }) {
         }
       })
       .catch((error) => {
-        console.log("error", error);
+        popupNotification(error.response.data);
+        console.log("error", error.response.data);
       });
   };
 
@@ -53,6 +71,7 @@ export default function OtpValidation({ email }) {
           Validate OTP
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 }

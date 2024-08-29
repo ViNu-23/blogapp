@@ -19,7 +19,7 @@ export default function NavbarPage() {
       console.log("login first");
       toast.info("Please Login before creating a post", {
         position: "bottom-center",
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -62,7 +62,7 @@ export default function NavbarPage() {
                 <input
                   type="text"
                   className=" bg-slate-800 rounded-full px-5 py-2 w-full text-white "
-                  placeholder="Search blog name, author, or category here."
+                  placeholder="Search..."
                 />
                 <span className="absolute text-white right-4 cursor-pointer hover:scale-125 transition-transform duration-200">
                   <svg
@@ -137,6 +137,7 @@ export default function NavbarPage() {
             <div className="flex justify-center mt-3">
               <li className="w-96 flex items-center relative">
                 <input
+                placeholder="Search..."
                   type="text"
                   className=" bg-slate-800 rounded-full px-5 py-2 w-full text-white"
                 />
