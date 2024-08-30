@@ -14,9 +14,20 @@ import ReadPost from "./Pages/ReadPost";
 import NotFoundPage from "./Pages/NotFoundPage";
 import axios from "axios";
 
-axios.defaults.baseURL = "https://blog-app-backend-green.vercel.app/";
-// axios.defaults.baseURL = "http://localhost:3000"; 
+// axios.defaults.baseURL = "https://blog-app-backend-green.vercel.app/";
+axios.defaults.baseURL = "http://localhost:3000"; 
 axios.defaults.withCredentials = true;
+
+axios.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
 
 function App() {
   const location = useLocation();

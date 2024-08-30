@@ -36,12 +36,22 @@ export default function LovedBy({ id, lovedBy }) {
 
   async function handleLikeButton(e) {
     e.preventDefault();
-    if (isLogedin) {
+    const token = sessionStorage.getItem("token"); // Retrieve the token from session storage
+  
+    if (isLogedin && token) {
       await axios
-        .post("/like", { postId: id })
+        .post(
+          "/like",
+          { postId: id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+            },
+          }
+        )
         .then((response) => {
           console.log(response);
-
+  
           if (response.status === 200) {
             setLike((previous) => !previous);
             popupNotification("Post Liked", "info");
@@ -54,6 +64,7 @@ export default function LovedBy({ id, lovedBy }) {
       popupNotification("Please Login to Like a Post", "info");
     }
   }
+  
 
   async function handleDisLikeButton(e) {
     e.preventDefault();

@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function UserPosts() {
   const [posts, setPosts] = useState([]);
-
+  const [deleteloading, setDeleteloading] = useState(false);
   function popupNotification(message, type) {
     return toast[type](message, {
       position: "bottom-center",
@@ -67,16 +67,23 @@ export default function UserPosts() {
   }
 
   async function handleDeletePost(id) {
-    const isConfirmed = window.confirm("Are you sure you want to delete this post?");
-  
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+
     if (isConfirmed) {
+      setDeleteloading(true);
       await axios
         .post("/deletepost", { id })
         .then((response) => {
           console.log("response from /deletepost", response.data);
           if (response.status === 200) {
             popupNotification(response.data, "success");
-            setPosts((prevPosts) => prevPosts.filter((post) => post._id !== id));
+            setDeleteloading(false);
+
+            setPosts((prevPosts) =>
+              prevPosts.filter((post) => post._id !== id)
+            );
           }
         })
         .catch((error) => {
@@ -87,10 +94,10 @@ export default function UserPosts() {
       console.log("Post deletion canceled");
     }
   }
-  
+   console.log(posts)
 
   return (
-    <div className="min-h-screen  flex flex-col  items-center bg-slate-900 text-white">
+    <div className="min-h-screen  flex flex-col  items-center bg-slate-900 text-white relative">
       {posts.length > 0 ? (
         posts.map((post, index) => (
           <div
@@ -145,8 +152,8 @@ export default function UserPosts() {
             </div>
           </div>
         ))
-      ) : (
-        <div className="flex text-gray-600 -mt-56">
+      ): (
+        <div className="flex text-gray-600 mt-10">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -155,10 +162,15 @@ export default function UserPosts() {
           >
             <path d="m20.798 11.012-3.188 3.416L9.462 6.28l4.24-4.542a.75.75 0 0 1 1.272.71L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262ZM3.202 12.988 6.39 9.572l8.148 8.148-4.24 4.542a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262ZM3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18Z" />
           </svg>
-          <h1 className="ml-2">No posts available</h1>
+          <h1 className="ml-2">No posts available </h1>
         </div>
       )}
       <ToastContainer />
+      {deleteloading && (
+        <p className="bg-opacity-10 backdrop-blur-lg min-h-screen w-screen text-center text-sky-400 absolute bg-black justify-center items-center flex font-semibold text-xl">
+          Deleting...
+        </p>
+      )}
     </div>
   );
 }

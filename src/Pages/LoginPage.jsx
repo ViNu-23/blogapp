@@ -27,14 +27,16 @@ export default function LoginPage() {
     });
   }
 
+
   function handleFormSubmit(e) {
     e.preventDefault();
     axios
-      .post("/login", { email, password }, { withCredentials: true })
+      .post("/login", { email, password })
       .then((response) => {
         console.log(response);
         if (response.status === 200) {
-          const { avatar, name, email, location } = response.data;
+          const { avatar, name, email, location } = response.data.user;
+          sessionStorage.setItem("token", response.data.token); 
           localStorage.setItem(
             "user",
             JSON.stringify({ avatar, name, email, location })
@@ -47,6 +49,9 @@ export default function LoginPage() {
         popupNotification(error.response.data, "error");
       });
   }
+  
+  
+  
   
 
   async function handleResetPassword(e) {

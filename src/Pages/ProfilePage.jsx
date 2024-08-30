@@ -35,18 +35,18 @@ export default function ProfilePage() {
   };
 
   const handleLogout = async () => {
-    await axios
-      .post("/logout", {})
-      .then((response) => {
-        if (response.status === 200) {
-          localStorage.removeItem("user");
-          window.location.href = "/home";
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const response = await axios.post("/logout");
+      if (response.status === 200) {
+        sessionStorage.removeItem("token"); 
+        localStorage.removeItem("user"); 
+        window.location.href = "/home"; 
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
+  
 
   return (
     <div className=" min-h-screen w-full bg-slate-900 text-white flex justify-center p-6">

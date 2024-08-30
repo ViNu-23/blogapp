@@ -30,8 +30,16 @@ export default function OtpValidation({ email }) {
       .post("/verifyotp", { otp, email })
       .then((response) => {
         if (response.status === 200) {
-          const { avatar, name, email,location } = response.data;
-          localStorage.setItem("user", JSON.stringify({ avatar, name, email,location }));
+          console.log('response',response);
+          console.log('res data',response.data);
+          
+          
+          const { avatar, name, email, location } = response.data.user;
+          sessionStorage.setItem("token", response.data.token); 
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ avatar, name, email, location })
+          );
           navigate("/home");
         }
       })
