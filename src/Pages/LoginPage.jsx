@@ -30,7 +30,7 @@ export default function LoginPage() {
   function handleFormSubmit(e) {
     e.preventDefault();
     axios
-      .post("/login", { email, password })
+      .post("/login", { email, password }, { withCredentials: true })
       .then((response) => {
         console.log(response);
         if (response.status === 200) {
@@ -47,6 +47,7 @@ export default function LoginPage() {
         popupNotification(error.response.data, "error");
       });
   }
+  
 
   async function handleResetPassword(e) {
     e.preventDefault();
