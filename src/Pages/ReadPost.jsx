@@ -2,15 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { format } from "date-fns";
+import LovedBy from "./LovedBy";
 
 export default function ReadPost() {
   const { id } = useParams();
   const [post, setPost] = useState();
-   useEffect(() => {
+  
+
+  useEffect(() => {
     axios.get(`/readpost/${id}`).then((response) => {
       setPost(response.data);
     });
-  },[]);
+  }, []);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -32,12 +35,16 @@ export default function ReadPost() {
     <div className=" min-h-screen bg-slate-900 text-white px-6 py-4">
       {post && (
         <div>
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-4 relative">
             <img
               src={post.image}
               alt="img"
               className="md:w-1/2 w-full rounded-lg"
             />
+            <div className="absolute top-4 lg:right-80 right-4">
+            
+              <LovedBy id={id} lovedBy={post.lovedBy}/> 
+            </div>
           </div>
           <div className="my-4 text-center">
             <h1 className="font-semibold text-2xl text-sky-400">
@@ -45,7 +52,7 @@ export default function ReadPost() {
             </h1>
           </div>
           <div>
-            <div dangerouslySetInnerHTML={{ __html: post.description }}/>
+            <div dangerouslySetInnerHTML={{ __html: post.description }} />
           </div>
           <div className="my-6 flex justify-between">
             <div className="flex gap-4 items-center">

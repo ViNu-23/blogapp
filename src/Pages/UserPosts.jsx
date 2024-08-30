@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 export default function UserPosts() {
   const [posts, setPosts] = useState([]);
 
-
   function popupNotification(message, type) {
     return toast[type](message, {
       position: "bottom-center",
@@ -56,18 +55,42 @@ export default function UserPosts() {
   };
 
   function handleShare(id) {
-    let url = `https://blog-frontend-vijay.vercel.app/read/${id}`
-    navigator.clipboard.writeText(url)
-    .then(() => {
-      popupNotification("Link Copied", "success");
-    })
-    .catch(err => {
-      popupNotification(err, "error");
-    });
+    let url = `https://blog-frontend-vijay.vercel.app/read/${id}`;
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        popupNotification("Link Copied", "success");
+      })
+      .catch((err) => {
+        popupNotification(err, "error");
+      });
   }
 
+  async function handleDeletePost(id) {
+    const isConfirmed = window.confirm("Are you sure you want to delete this post?");
+  
+    if (isConfirmed) {
+      await axios
+        .post("/deletepost", { id })
+        .then((response) => {
+          console.log("response from /deletepost", response.data);
+          if (response.status === 200) {
+            popupNotification(response.data, "success");
+            setPosts((prevPosts) => prevPosts.filter((post) => post._id !== id));
+          }
+        })
+        .catch((error) => {
+          console.log("error from /deletepost", error);
+          popupNotification(error.response.data, "error");
+        });
+    } else {
+      console.log("Post deletion canceled");
+    }
+  }
+  
+
   return (
-    <div className="min-h-screen  flex flex-col justify-center items-center bg-slate-900 text-white">
+    <div className="min-h-screen  flex flex-col  items-center bg-slate-900 text-white">
       {posts.length > 0 ? (
         posts.map((post, index) => (
           <div
@@ -103,14 +126,17 @@ export default function UserPosts() {
                   <FaEdit />
                 </button>
 
-                <button className="flex items-center gap-1 bg-slate-900 px-3 py-1 rounded-lg hover:text-red-400">
+                <button
+                  className="flex items-center gap-1 bg-slate-900 px-3 py-1 rounded-lg hover:text-red-400"
+                  onClick={() => handleDeletePost(post._id)}
+                >
                   <span>Delete</span>
                   <MdDelete />
                 </button>
 
                 <button
                   className="flex items-center gap-1 bg-slate-900 px-3 py-1 rounded-lg hover:text-teal-400"
-                  onClick={()=>handleShare(post._id)}
+                  onClick={() => handleShare(post._id)}
                 >
                   <span>Share</span>
                   <FaShare />
@@ -132,7 +158,7 @@ export default function UserPosts() {
           <h1 className="ml-2">No posts available</h1>
         </div>
       )}
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }

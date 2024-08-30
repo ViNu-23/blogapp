@@ -69,11 +69,11 @@ export default function ProfilePage() {
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="w-full px-4 py-2 rounded-lg bg-gray-100 bg-opacity-10 cursor-pointer"
+              className="w-full px-4 py-2 rounded-lg bg-gray-100 bg-opacity-10 cursor-pointer hover:text-sky-400"
             />
           </div>
 
-          <div className="bg-gray-100 bg-opacity-10 my-3 px-4 py-3 rounded-lg flex">
+          <div className="bg-gray-700 bg-opacity-10 my-3 px-4 py-3 rounded-lg flex">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -86,7 +86,7 @@ export default function ProfilePage() {
 
             <span className="ml-2">{user.email}</span>
           </div>
-          <div className="bg-gray-100 bg-opacity-10 my-3 px-4 py-3 rounded-lg flex">
+          <div className="bg-gray-700 bg-opacity-10 my-3 px-4 py-3 rounded-lg flex">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -118,23 +118,13 @@ export default function ProfilePage() {
 
             <span className="ml-2">My blogs</span>
           </div>
-          <div className="bg-gray-100 bg-opacity-10 my-3 px-4 py-3 rounded-lg flex">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-              />
-            </svg>
+          <div className="bg-gray-100 bg-opacity-10 my-3 px-4 py-3 rounded-lg flex cursor-pointer hover:text-red-400">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+  <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+</svg>
 
-            <span className="ml-2">Edit details</span>
+
+            <span className="ml-2">Loved Blogs</span>
           </div>
           <button
             className="bg-red-400 bg-opacity-10 mt-12 px-4 py-3 rounded-lg flex text-red-600 w-full  justify-center"
