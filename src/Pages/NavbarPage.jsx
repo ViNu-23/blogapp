@@ -3,6 +3,7 @@ import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import NotificationPage from "./NotificationPage";
 
 export default function NavbarPage() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -124,7 +125,9 @@ export default function NavbarPage() {
                 clipRule="evenodd"
               />
             </svg>
-            <span className="text-sky-400 text-sm font-bold absolute -top-2 -right-1">0</span>
+            <div className="text-sky-400 text-sm font-bold absolute -top-2 -right-1">
+              <NotificationPage/>
+            </div>
             </div>
 
             <Link

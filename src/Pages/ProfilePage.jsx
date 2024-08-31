@@ -1,11 +1,28 @@
 import axios from "axios";
 import { useState } from "react";
 import UserPosts from "./UserPosts";
+import { FaShare } from "react-icons/fa";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ProfilePage() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [profilePic, setProfilePic] = useState(user.avatar);
   const [showpost, setShowpost] = useState(false);
+
+  function popupNotification(message, type) {
+    return toast[type](message, {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  }
 
   const handleFileChange = async (event) => {
     const selectedFile = event.target.files[0];
@@ -38,15 +55,27 @@ export default function ProfilePage() {
     try {
       const response = await axios.post("/logout");
       if (response.status === 200) {
-        sessionStorage.removeItem("token"); 
-        localStorage.removeItem("user"); 
-        window.location.href = "/home"; 
+        sessionStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/home";
       }
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
-  
+
+  function handleshareProfile(e) {
+    e.preventDefault();
+    let url = `https://blog-frontend-vijay.vercel.app/profile/${user.email}`
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        popupNotification("Link Copied", "success");
+      })
+      .catch((err) => {
+        popupNotification(err, "error");
+      });
+  }
 
   return (
     <div className=" min-h-screen w-full bg-slate-900 text-white flex justify-center p-6">
@@ -119,13 +148,24 @@ export default function ProfilePage() {
             <span className="ml-2">My blogs</span>
           </div>
           <div className="bg-gray-100 bg-opacity-10 my-3 px-4 py-3 rounded-lg flex cursor-pointer hover:text-red-400">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-  <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-</svg>
-
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="size-6"
+            >
+              <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+            </svg>
 
             <span className="ml-2">Loved Blogs</span>
           </div>
+          <button
+            onClick={handleshareProfile}
+            className="bg-gray-100 bg-opacity-10 items-center my-3 px-4 py-3 rounded-lg flex hover:text-sky-400 cursor-pointer w-full"
+          >
+            <FaShare size={18} />
+            <span className="ml-2"> Share Profile</span>
+          </button>
           <button
             className="bg-red-400 bg-opacity-10 mt-12 px-4 py-3 rounded-lg flex text-red-600 w-full  justify-center"
             onClick={handleLogout}
@@ -170,6 +210,7 @@ export default function ProfilePage() {
           <UserPosts />
         </div>
       )}
+      <ToastContainer />
     </div>
   );
 }

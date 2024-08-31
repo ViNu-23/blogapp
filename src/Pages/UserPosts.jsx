@@ -7,10 +7,12 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
 
 export default function UserPosts() {
   const [posts, setPosts] = useState([]);
   const [deleteloading, setDeleteloading] = useState(false);
+  
   function popupNotification(message, type) {
     return toast[type](message, {
       position: "bottom-center",
@@ -94,7 +96,6 @@ export default function UserPosts() {
       console.log("Post deletion canceled");
     }
   }
-   console.log(posts)
 
   return (
     <div className="min-h-screen  flex flex-col  items-center bg-slate-900 text-white relative">
@@ -111,7 +112,7 @@ export default function UserPosts() {
                 className="h-full w-full object-cover rounded-lg"
               />
             </div>
-            <div className="md:ml-4 flex flex-col justify-between w-full gap-y-3">
+            <div className="ml-0 md:ml-4 flex flex-col justify-between w-full gap-y-3">
               <h1 className="font-semibold text-xl text-sky-400 mt-2 md:mt-0">
                 {post.title}
               </h1>
@@ -128,10 +129,10 @@ export default function UserPosts() {
               </div>
 
               <div className="flex justify-between">
-                <button className="flex items-center gap-1 bg-slate-900 px-3 py-1 rounded-lg hover:text-blue-400">
+                <Link to={`/editpost/${post._id}`} className="flex items-center gap-1 bg-slate-900 px-3 py-1 rounded-lg hover:text-blue-400">
                   <span>Edit</span>
                   <FaEdit />
-                </button>
+                </Link>
 
                 <button
                   className="flex items-center gap-1 bg-slate-900 px-3 py-1 rounded-lg hover:text-red-400"
@@ -167,7 +168,7 @@ export default function UserPosts() {
       )}
       <ToastContainer />
       {deleteloading && (
-        <p className="bg-opacity-10 backdrop-blur-lg min-h-screen w-screen text-center text-sky-400 absolute bg-black justify-center items-center flex font-semibold text-xl">
+        <p className="bg-opacity-10 backdrop-blur-lg h-full w-full text-center text-sky-400 absolute bg-black justify-center items-center flex font-semibold text-xl">
           Deleting...
         </p>
       )}

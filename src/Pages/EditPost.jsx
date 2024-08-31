@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useParams } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function CreatePost() {
+export default function EditPost() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -13,6 +14,23 @@ export default function CreatePost() {
   const [previewPic, setPreviewPic] = useState("");
   const [loading, setLoading] = useState(false);
   const [deletingPost, setDeletingPost] = useState(false);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`/editpost/${id}`)
+      .then((response) => {
+        const { title, category, description, image } = response.data;
+        setTitle(title);
+        setCategory(category);
+        setDescription(description);
+        setPreviewPic(image);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   function popupNotification(message, type) {
     return toast[type](message, {
@@ -62,11 +80,16 @@ export default function CreatePost() {
         imagename: previewPic,
       });
       if (response.status === 200) {
+        console.log('response by /deletepostimage',response.data);
+        
         setPreviewPic("");
         setDeletingPost(false);
+      return popupNotification("Image removed", "success");
+
       }
     } catch (error) {
-      console.log(error);
+      console.log('response by /deletepostimage',error.response);
+
     }
   };
 
@@ -78,29 +101,30 @@ export default function CreatePost() {
       category === "" ||
       previewPic === ""
     ) {
-      return popupNotification("Please fill all fields", "warn");
+      return popupNotification("Please fill all fields and Image", "warn");
     }
     try {
-      const response = await axios.post("/createpost", {
+      const response = await axios.post(`/editpost/${id}`, {
         title,
         category,
         image: previewPic,
         description,
       });
       if (response.status === 200) {
-        popupNotification(response.data, "success");
         setTitle("");
         setCategory("");
         setDescription("");
         setPreviewPic("");
-        console.log("response from /createpost", response.data);
+        console.log("response from `/editpost/${id}`", response.data);
+        popupNotification("Post updated", "success");
+
       } else {
-        console.log("Else from /createpost");
-        popupNotification("Post not created", "error");
+        console.log("Else from `/editpost/${id}`");
+        popupNotification("Something wint wrong", "error");
       }
     } catch (error) {
-      console.log("error from /createpost", error);
-      popupNotification(error, "error");
+      console.log("error from `/editpost/${id}`", error);
+      popupNotification(error.response.data, "error");
     }
   };
 
