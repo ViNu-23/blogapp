@@ -40,24 +40,28 @@ export default function LoginPage() {
         // Wrap storage operations in a Promise
         await new Promise((resolve, reject) => {
           try {
-            sessionStorage.setItem("token", response.data.token);
+            console.log("Storing token in sessionStorage");
+            console.log("Storing user in localStorage");
             localStorage.setItem(
               "user",
               JSON.stringify({ avatar, name, email, location })
             );
+            sessionStorage.setItem("token", response.data.token);
             resolve(); // Resolve after successful storage
           } catch (error) {
             reject(error); // Reject if there's an error
           }
         });
   
+        console.log("Navigating to home");
         navigate("/home"); // Navigate after storage is complete
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error during login:", error);
       popupNotification(error.response?.data || "Login failed", "error");
     }
   }
+  
   
   
   
