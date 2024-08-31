@@ -28,27 +28,37 @@ export default function LoginPage() {
   }
 
 
-  function handleFormSubmit(e) {
+  async function handleFormSubmit(e) {
     e.preventDefault();
-    axios
-      .post("/login", { email, password })
-      .then((response) => {
-        console.log(response);
-        if (response.status === 200) {
-          const { avatar, name, email, location } = response.data.user;
-          sessionStorage.setItem("token", response.data.token); 
-          localStorage.setItem(
-            "user",
-            JSON.stringify({ avatar, name, email, location })
-          );
-          navigate("/home");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        popupNotification(error.response.data, "error");
-      });
+  
+    try {
+      const response = await axios.post("/login", { email, password });
+  
+      if (response.status === 200) {
+        const { avatar, name, email, location } = response.data.user;
+  
+        // Wrap storage operations in a Promise
+        await new Promise((resolve, reject) => {
+          try {
+            sessionStorage.setItem("token", response.data.token);
+            localStorage.setItem(
+              "user",
+              JSON.stringify({ avatar, name, email, location })
+            );
+            resolve(); // Resolve after successful storage
+          } catch (error) {
+            reject(error); // Reject if there's an error
+          }
+        });
+  
+        navigate("/home"); // Navigate after storage is complete
+      }
+    } catch (error) {
+      console.error(error);
+      popupNotification(error.response?.data || "Login failed", "error");
+    }
   }
+  
   
   
   
