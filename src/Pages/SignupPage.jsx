@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import OtpValidation from "./OtpValidation";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -62,6 +62,11 @@ export default function SignupPage() {
   const [password, setPassword] = useState();
 
   const [isotpsent, setIsotpsent] = useState(false);
+  const token = sessionStorage.getItem("token");
+
+  if (token) return (
+    <Navigate to="/" />
+  )
 
   function popupNotification(message,type) {
     return toast[type](message, {

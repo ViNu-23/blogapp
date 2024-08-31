@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,6 +17,11 @@ export default function EditPost() {
   const [deletingPost, setDeletingPost] = useState(false);
 
   const { id } = useParams();
+  const token = sessionStorage.getItem("token");
+
+  if (!token) return (
+    <Navigate to="/login" />
+  )
 
   useEffect(() => {
     axios
@@ -129,7 +135,9 @@ export default function EditPost() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex justify-center px-4 pt-10 pb-4">
+    <>{
+      token &&(
+        <div className="min-h-screen bg-slate-900 text-white flex justify-center px-4 pt-10 pb-4">
       <form
         className="bg-slate-800 md:px-8 px-4 mb-4 rounded-lg shadow-lg w-full max-w-3xl h-fit"
         onSubmit={handleSubmit}
@@ -253,5 +261,7 @@ export default function EditPost() {
       </form>
       <ToastContainer />
     </div>
+      )
+    }</>
   );
 }

@@ -24,9 +24,9 @@ export default function OtpValidation({ email }) {
   }
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    axios
+   await axios
       .post("/verifyotp", { otp, email })
       .then((response) => {
         if (response.status === 200) {
@@ -36,11 +36,13 @@ export default function OtpValidation({ email }) {
           
           const { avatar, name, email, location } = response.data.user;
           sessionStorage.setItem("token", response.data.token); 
+          console.log('token',response.data.token);
+          
           localStorage.setItem(
             "user",
             JSON.stringify({ avatar, name, email, location })
           );
-          navigate("/home");
+          navigate("/");
         }
       })
       .catch((error) => {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
@@ -12,6 +12,11 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [forgotPassword, setForgotPassword] = useState(false);
   const [otpsend, setOTPsend] = useState(false);
+  const token = sessionStorage.getItem("token");
+
+  if (token) return (
+    <Navigate to="/" />
+  )
 
   function popupNotification(message, type) {
     return toast[type](message, {
@@ -27,46 +32,28 @@ export default function LoginPage() {
     });
   }
 
-
-  async function handleFormSubmit(e) {
+  function handleFormSubmit(e) {
     e.preventDefault();
-  
-    try {
-      const response = await axios.post("/login", { email, password });
-  
-      if (response.status === 200) {
-        const { avatar, name, email, location } = response.data.user;
-  
-        // Wrap storage operations in a Promise
-        await new Promise((resolve, reject) => {
-          try {
-            console.log("Storing token in sessionStorage");
-            console.log("Storing user in localStorage");
-            localStorage.setItem(
-              "user",
-              JSON.stringify({ avatar, name, email, location })
-            );
-            sessionStorage.setItem("token", response.data.token);
-            resolve(); // Resolve after successful storage
-          } catch (error) {
-            reject(error); // Reject if there's an error
-          }
-        });
-  
-        console.log("Navigating to home");
-        navigate("/home"); // Navigate after storage is complete
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-      popupNotification(error.response?.data || "Login failed", "error");
-    }
+    axios
+      .post("/login", { email, password })
+      .then((response) => {
+        if (response.status === 200) {
+          const { avatar, name, email, location } = response.data.user;
+
+          sessionStorage.setItem("token", response.data.token);
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ avatar, name, email, location })
+          );
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.error("Error during login:", error);
+        popupNotification(error.response?.data || "Login failed", "error");
+      });
   }
-  
-  
-  
-  
-  
-  
 
   async function handleResetPassword(e) {
     e.preventDefault();

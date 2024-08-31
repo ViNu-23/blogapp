@@ -56,7 +56,7 @@ export default function ResetpasswordPage({ email }) {
         popupNotification(response.data.message, "success");
         if (response.status === 200) {
           setTimeout(() => {
-            navigate("/home");
+            navigate("/");
           }, 2000);
         }
       })

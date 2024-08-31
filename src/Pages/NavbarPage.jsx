@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NotificationPage from "./NotificationPage";
+import { useEffect } from "react";
 
 export default function NavbarPage() {
   const user = JSON.parse(localStorage.getItem("user"));
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const location = useLocation();
-  const searchBar = location.pathname === "/" || location.pathname === "/home";
+  const searchBar = location.pathname === "/" || location.pathname === "/";
   const newPost = location.pathname === "/create";
   const navigate = useNavigate();
 
@@ -31,6 +32,10 @@ export default function NavbarPage() {
       });
     }
   }
+  useEffect(() => {
+console.log('use effect from navigation bar');
+
+  },[])
 
   return (
     <div className="bg-slate-900 px-6 py-4 border-b-[1px] border-slate-700">

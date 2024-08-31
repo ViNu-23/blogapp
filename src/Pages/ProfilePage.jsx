@@ -4,11 +4,17 @@ import UserPosts from "./UserPosts";
 import { FaShare } from "react-icons/fa";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Navigate } from "react-router-dom";
 
 export default function ProfilePage() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [profilePic, setProfilePic] = useState(user.avatar);
   const [showpost, setShowpost] = useState(false);
+
+  const token = sessionStorage.getItem("token");
+  if (!token) return (
+    <Navigate to="/login" />
+  )
 
   function popupNotification(message, type) {
     return toast[type](message, {
@@ -57,7 +63,7 @@ export default function ProfilePage() {
       if (response.status === 200) {
         sessionStorage.removeItem("token");
         localStorage.removeItem("user");
-        window.location.href = "/home";
+        window.location.href = "/";
       }
     } catch (error) {
       console.error("Logout failed:", error);
@@ -78,7 +84,10 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className=" min-h-screen w-full bg-slate-900 text-white flex justify-center p-6">
+   <>
+   {
+    token &&(
+      <div className=" min-h-screen w-full bg-slate-900 text-white flex justify-center p-6">
       {!showpost ? (
         <div className="p-4 rounded-xl bg-white bg-opacity-[0.05] backdrop-blur-[5px] border border-white border-opacity-[0.18] h-fit ">
           <div className=" flex justify-center w-full ">
@@ -212,5 +221,8 @@ export default function ProfilePage() {
       )}
       <ToastContainer />
     </div>
+    )
+   }
+   </>
   );
 }

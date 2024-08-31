@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { Navigate } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -9,10 +10,15 @@ export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
-
+  
   const [previewPic, setPreviewPic] = useState("");
   const [loading, setLoading] = useState(false);
   const [deletingPost, setDeletingPost] = useState(false);
+  const token = sessionStorage.getItem("token");
+
+  if (!token) return (
+    <Navigate to="/login" />
+  )
 
   function popupNotification(message, type) {
     return toast[type](message, {
@@ -103,6 +109,8 @@ export default function CreatePost() {
       popupNotification(error, "error");
     }
   };
+
+
 
   return (
     <div className="min-h-screen bg-slate-900 text-white flex justify-center px-4 pt-10 pb-4">
