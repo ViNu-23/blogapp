@@ -7,6 +7,19 @@ import "react-toastify/dist/ReactToastify.css";
 export default function LovedBy({ id, lovedBy }) {
   const [like, setLike] = useState(false);
   const [isLogedin, setIsLoggedin] = useState(false)
+  const token = sessionStorage.getItem("token");
+  
+  axios.interceptors.request.use(
+    (config) => {
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -69,7 +82,11 @@ export default function LovedBy({ id, lovedBy }) {
   async function handleDisLikeButton(e) {
     e.preventDefault();
     await axios
-      .post("/dislike", { postId: id })
+      .post("/dislike", { postId: id },{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         console.log(response);
 

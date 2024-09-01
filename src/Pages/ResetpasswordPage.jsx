@@ -11,6 +11,7 @@ export default function ResetpasswordPage({ email }) {
   const [verifiedotp, setVerifiedotp] = useState(false);
   const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
+  
   axios.interceptors.request.use(
     (config) => {
       if (token) {
@@ -62,7 +63,11 @@ export default function ResetpasswordPage({ email }) {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/setnewpassword", { newpassword });
+      const response = await axios.post("/setnewpassword",{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }, { newpassword });
       if (response.status === 200) {
         console.log("response from /setnewpassword", response);
         popupNotification(response.data.message, "success");

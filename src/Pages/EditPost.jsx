@@ -115,6 +115,10 @@ export default function EditPost() {
         category,
         image: previewPic,
         description,
+      },{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (response.status === 200) {
         setTitle("");

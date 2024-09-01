@@ -19,7 +19,18 @@ export default function CreatePost() {
   if (!token) return (
     <Navigate to="/login" />
   )
-
+  
+  axios.interceptors.request.use(
+    (config) => {
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
   function popupNotification(message, type) {
     return toast[type](message, {
       position: "bottom-center",
@@ -81,21 +92,27 @@ export default function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      title === "" ||
-      description === "" ||
-      category === "" ||
-      previewPic === ""
-    ) {
+    
+    if (title === "" || description === "" || category === "" || previewPic === "") {
       return popupNotification("Please fill all fields", "warn");
     }
+  
     try {
-      const response = await axios.post("/createpost", {
-        title,
-        category,
-        image: previewPic,
-        description,
-      });
+      const response = await axios.post(
+        "/createpost",
+        { 
+          title, 
+          category, 
+          image: previewPic, 
+          description 
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
       if (response.status === 200) {
         popupNotification(response.data, "success");
         setTitle("");
@@ -112,6 +129,7 @@ export default function CreatePost() {
       popupNotification(error, "error");
     }
   };
+  
 
 
 
