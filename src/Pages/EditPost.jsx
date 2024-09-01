@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -252,14 +252,14 @@ export default function EditPost() {
               </div>
             </div>
             <div className="my-8 flex justify-around items-center">
-              <button
-                type="button" // Prevent form submission
+              <Link
+                to="/" 
                 className="bg-orange-700 px-6 py-2 rounded-lg hover:bg-orange-900"
               >
                 Cancel
-              </button>
+              </Link>
               <button
-                type="submit" // Trigger form submission
+                type="submit" 
                 className="bg-green-700 px-6 py-2 rounded-lg hover:bg-green-900"
               >
                 Create

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NotificationPage from "./NotificationPage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function NavbarPage() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -13,6 +13,7 @@ export default function NavbarPage() {
   const searchBar = location.pathname === "/" || location.pathname === "/";
   const newPost = location.pathname === "/create";
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
   const token = sessionStorage.getItem("token");
 
   function handleCreatePost() {
@@ -34,9 +35,15 @@ export default function NavbarPage() {
     }
   }
   useEffect(() => {
-console.log('use effect from navigation bar');
+    console.log("use effect from navigation bar");
+  }, []);
 
-  },[])
+  function handleSearchSubmit(event) {
+    event.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/?search=${encodeURIComponent(searchQuery)}`);
+    }
+  }
 
   return (
     <div className="bg-slate-900 px-6 py-4 border-b-[1px] border-slate-700">
@@ -70,8 +77,10 @@ console.log('use effect from navigation bar');
                   type="text"
                   className=" bg-slate-800 rounded-full px-5 py-2 w-full text-white "
                   placeholder="Search..."
+                  value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <span className="absolute text-white right-4 cursor-pointer hover:scale-125 transition-transform duration-200">
+                <span onClick={handleSearchSubmit} className="absolute text-sky-400 right-4 cursor-pointer hover:scale-125 transition-transform duration-200">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -119,21 +128,21 @@ console.log('use effect from navigation bar');
         {token ? (
           <>
             <div className="relative cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="size-6"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <div className="text-sky-400 text-sm font-bold absolute -top-2 -right-1">
-              <NotificationPage/>
-            </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="size-6"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <div className="text-sky-400 text-sm font-bold absolute -top-2 -right-1">
+                <NotificationPage />
+              </div>
             </div>
 
             <Link
@@ -167,8 +176,10 @@ console.log('use effect from navigation bar');
                   placeholder="Search..."
                   type="text"
                   className=" bg-slate-800 rounded-full px-5 py-2 w-full text-white"
+                  value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <span className="absolute text-white right-4 cursor-pointer hover:scale-125 transition-transform duration-200">
+                <span className="absolute text-sky-400 right-4 cursor-pointer hover:scale-125 transition-transform duration-200">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -176,6 +187,7 @@ console.log('use effect from navigation bar');
                     strokeWidth={1.5}
                     stroke="currentColor"
                     className="size-5"
+                    onClick={handleSearchSubmit}
                   >
                     <path
                       strokeLinecap="round"

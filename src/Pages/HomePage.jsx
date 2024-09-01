@@ -1,27 +1,55 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ReloadPage from "./ReloadPage";
 import { format } from "date-fns";
 import { TbWifiOff } from "react-icons/tb";
 import { FaHeart } from "react-icons/fa";
+import { GrFormPrevious,GrFormNext } from "react-icons/gr";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get("search") || "";
 
   useEffect(() => {
-    axios
-      .get("/posts")
-      .then((response) => {
-        setPosts(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`/posts/${currentPage}`);
+        setPosts(response.data.posts);
+        setTotalPages(response.data.totalPages);
+      } catch (error) {
         console.error("Error fetching posts:", error);
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchPosts();
+  }, [currentPage]);
+
+  const filteredPosts = posts.filter(
+    (post) =>
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -44,8 +72,8 @@ export default function HomePage() {
       <div className="flex flex-wrap justify-around">
         {loading ? (
           <ReloadPage />
-        ) : posts.length > 0 ? (
-          posts.map((post, i) => (
+        ) : filteredPosts.length > 0 ? (
+          filteredPosts.map((post, i) => (
             <Link
               to={`/read/${post._id}`}
               key={i}
@@ -107,6 +135,16 @@ export default function HomePage() {
             <p> Connection lost !</p>
           </div>
         )}
+      </div>
+      <div className="flex gap-6 items-center my-4 w-full justify-center">
+        {currentPage > 1 &&(
+          <button onClick={handlePrev} disabled={currentPage === 1} className="flex items-center justify-center px-3 w-28 py-1 bg-sky-400 rounded-lg">
+          <GrFormPrevious size={20}/> Previous
+         </button>
+        )}
+        <button onClick={handleNext} disabled={currentPage === totalPages} className="flex items-center justify-center  px-3 w-28 py-1 bg-sky-400 rounded-lg">
+        Next <GrFormNext size={20}/>
+         </button>
       </div>
     </div>
   );

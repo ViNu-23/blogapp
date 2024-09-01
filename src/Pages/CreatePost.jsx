@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -10,16 +10,14 @@ export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
-  
+
   const [previewPic, setPreviewPic] = useState("");
   const [loading, setLoading] = useState(false);
   const [deletingPost, setDeletingPost] = useState(false);
   const token = sessionStorage.getItem("token");
 
-  if (!token) return (
-    <Navigate to="/login" />
-  )
-  
+  if (!token) return <Navigate to="/login" />;
+
   axios.interceptors.request.use(
     (config) => {
       if (token) {
@@ -65,10 +63,10 @@ export default function CreatePost() {
       if (response.status === 200) {
         setLoading(false);
         setPreviewPic(response.data);
-        console.log("response by /postimage",response);   
+        console.log("response by /postimage", response);
       }
     } catch (error) {
-      console.log("error by /postimage",error);
+      console.log("error by /postimage", error);
     }
   };
 
@@ -82,29 +80,33 @@ export default function CreatePost() {
       if (response.status === 200) {
         setPreviewPic("");
         setDeletingPost(false);
-        console.log("response by /deleteimage",response);   
-
+        console.log("response by /deleteimage", response);
       }
     } catch (error) {
-      console.log("error by /deleteimage",error);
+      console.log("error by /deleteimage", error);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (title === "" || description === "" || category === "" || previewPic === "") {
+
+    if (
+      title === "" ||
+      description === "" ||
+      category === "" ||
+      previewPic === ""
+    ) {
       return popupNotification("Please fill all fields", "warn");
     }
-  
+
     try {
       const response = await axios.post(
         "/createpost",
-        { 
-          title, 
-          category, 
-          image: previewPic, 
-          description 
+        {
+          title,
+          category,
+          image: previewPic,
+          description,
         },
         {
           headers: {
@@ -112,7 +114,7 @@ export default function CreatePost() {
           },
         }
       );
-  
+
       if (response.status === 200) {
         popupNotification(response.data, "success");
         setTitle("");
@@ -129,7 +131,6 @@ export default function CreatePost() {
       popupNotification(error, "error");
     }
   };
-  
 
 
 
@@ -242,14 +243,14 @@ export default function CreatePost() {
           </div>
         </div>
         <div className="my-8 flex justify-around items-center">
-          <button
-            type="button" // Prevent form submission
+          <Link
+            to="/"
             className="bg-orange-700 px-6 py-2 rounded-lg hover:bg-orange-900"
           >
             Cancel
-          </button>
+          </Link>
           <button
-            type="submit" // Trigger form submission
+            type="submit" 
             className="bg-green-700 px-6 py-2 rounded-lg hover:bg-green-900"
           >
             Create
