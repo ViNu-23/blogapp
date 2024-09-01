@@ -9,8 +9,19 @@ export default function ResetpasswordPage({ email }) {
   const [otp, setOTP] = useState();
   const [newpassword, setNewpassword] = useState("");
   const [verifiedotp, setVerifiedotp] = useState(false);
-
+  const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
+  axios.interceptors.request.use(
+    (config) => {
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   function popupNotification(message, type) {
     return toast[type](message, {
@@ -35,6 +46,7 @@ export default function ResetpasswordPage({ email }) {
         if (response.status === 200) {
           setVerifiedotp(true);
           const { avatar, name, email, location } = response.data.user;
+          sessionStorage.setItem("token", response.data.token);
           localStorage.setItem(
             "user",
             JSON.stringify({ avatar, name, email, location })
@@ -47,22 +59,22 @@ export default function ResetpasswordPage({ email }) {
       });
   }
 
-  async function handleResetPassword(e) {
-    e.preventDefault();
-    await axios
-      .post("/setnewpassword", { newpassword })
-      .then((response) => {
+  const handleResetPassword = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.post("/setnewpassword",{newpassword});
+      if(response.status === 200) {
         console.log("response from /setnewpassword", response.data);
         popupNotification(response.data.message, "success");
-        if (response.status === 200) {
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        }
-      })
-      .catch((error) => {
-        console.log("error from /setnewpassword", error);
-      });
+        navigate("/");
+      }
+    }catch(error){
+      console.log("error from /setnewpassword", error);
+      popupNotification("Something went wrong Please try again later", "error");
+      sessionStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }
   }
 
   return (

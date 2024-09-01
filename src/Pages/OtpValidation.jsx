@@ -35,6 +35,9 @@ export default function OtpValidation({ email }) {
           
           
           const { avatar, name, email, location } = response.data.user;
+          const {token}= response.data
+          console.log("tkn",token);
+          
           sessionStorage.setItem("token", response.data.token); 
           console.log('token',response.data.token);
           

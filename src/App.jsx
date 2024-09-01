@@ -21,10 +21,10 @@ import EditPost from "./Pages/EditPost";
 axios.defaults.baseURL = "https://blog-app-backend-green.vercel.app";
 axios.defaults.withCredentials = true;
 
-// Retrieve the token from session storage
+
 const token = sessionStorage.getItem("token");
 
-// Add Axios request interceptor to include the token in headers
+
 axios.interceptors.request.use(
   (config) => {
     if (token) {
@@ -41,8 +41,6 @@ function App() {
   const location = useLocation();
   const hideNavbar =
     location.pathname === "/login" || location.pathname === "/signup";
-  console.log("token from app", token);
-
   return (
     <>
       {!hideNavbar && <NavbarPage />}
@@ -71,4 +69,3 @@ export default function AppWrapper() {
     </Router>
   );
 }
-
