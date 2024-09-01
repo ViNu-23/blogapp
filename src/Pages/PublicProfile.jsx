@@ -7,33 +7,32 @@ import { FaUserXmark } from "react-icons/fa6";
 export default function PublicProfile() {
   const [data, setData] = useState(null);
   const { id } = useParams();
-const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
   useEffect(() => {
     axios
       .get(`/publicprofile/${id}`)
       .then((response) => {
-        setData(response.data);
-        if(response.status === 200) {
-          console.log(response.data);
+        if (response.status === 200) {
+          setData(response.data);
         }
-        
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-        setError(error.response.data.message)
+        setError(error.response.data.message);
       });
   }, [id]);
 
-  if (!data) return (
-    <div>
-      {error && (
-        <div className="flex min-h-screen w-full bg-slate-900 text-gray-500 justify-center pt-28 gap-2">
-         <FaUserXmark size={30}/>
-        <span className="text-2xl"> {error}</span>
+  if (!data)
+    return (
+      <div>
+        {error && (
+          <div className="flex min-h-screen w-full bg-slate-900 text-gray-500 justify-center pt-28 gap-2">
+            <FaUserXmark size={30} />
+            <span className="text-2xl"> {error}</span>
           </div>
-      )}
-    </div>
-  )
+        )}
+      </div>
+    );
 
   return (
     <div className="min-h-screen w-full bg-slate-900 text-white flex flex-col md:flex-row p-6">
@@ -76,7 +75,7 @@ const [error, setError] = useState(null)
           <span className="ml-2">{data.location}</span>
         </div>
         <div className="bg-gray-700 bg-opacity-10 items-center my-3 px-4 py-3 rounded-lg flex hover:text-sky-400 cursor-pointer">
-        <FaShare size={18}/>
+          <FaShare size={18} />
           <span className="ml-2"> Profile</span>
         </div>
       </div>
@@ -85,11 +84,13 @@ const [error, setError] = useState(null)
         <div className="flex flex-col md:flex-row h-fit md:w-3/4 justify-evenly flex-wrap gap-y-6">
           {data.posts.map((post) => (
             <Link
-          to={`/read/${post._id}`}
+              to={`/read/${post._id}`}
               key={post._id}
               className=" cursor-pointer p-4 md:max-w-96 w-full rounded-xl bg-white bg-opacity-[0.05] backdrop-blur-[5px] border border-white border-opacity-[0.18]"
             >
-              <h2 className="text-2xl font-semibold mb-2 text-sky-400">{post.title}</h2>
+              <h2 className="text-2xl font-semibold mb-2 text-sky-400">
+                {post.title}
+              </h2>
               <img
                 src={post.image}
                 alt={post.title}

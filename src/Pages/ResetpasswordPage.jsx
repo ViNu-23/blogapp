@@ -60,22 +60,22 @@ export default function ResetpasswordPage({ email }) {
   }
 
   const handleResetPassword = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const response = await axios.post("/setnewpassword",{newpassword});
-      if(response.status === 200) {
-        console.log("response from /setnewpassword", response.data);
+      const response = await axios.post("/setnewpassword", { newpassword });
+      if (response.status === 200) {
+        console.log("response from /setnewpassword", response);
         popupNotification(response.data.message, "success");
         navigate("/");
       }
-    }catch(error){
+    } catch (error) {
       console.log("error from /setnewpassword", error);
       popupNotification("Something went wrong Please try again later", "error");
       sessionStorage.removeItem("token");
       localStorage.removeItem("user");
       window.location.href = "/login";
     }
-  }
+  };
 
   return (
     <div className="min-h-screen w-screen bg-slate-900 text-white flex items-center justify-center px-4">

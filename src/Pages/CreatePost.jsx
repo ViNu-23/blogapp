@@ -54,9 +54,10 @@ export default function CreatePost() {
       if (response.status === 200) {
         setLoading(false);
         setPreviewPic(response.data);
+        console.log("response by /postimage",response);   
       }
     } catch (error) {
-      console.log(error);
+      console.log("error by /postimage",error);
     }
   };
 
@@ -70,9 +71,11 @@ export default function CreatePost() {
       if (response.status === 200) {
         setPreviewPic("");
         setDeletingPost(false);
+        console.log("response by /deleteimage",response);   
+
       }
     } catch (error) {
-      console.log(error);
+      console.log("error by /deleteimage",error);
     }
   };
 
@@ -99,7 +102,7 @@ export default function CreatePost() {
         setCategory("");
         setDescription("");
         setPreviewPic("");
-        console.log("response from /createpost", response.data);
+        console.log("response from /createpost", response);
       } else {
         console.log("Else from /createpost");
         popupNotification("Post not created", "error");

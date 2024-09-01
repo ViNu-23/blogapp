@@ -64,6 +64,7 @@ export default function ProfilePage() {
         sessionStorage.removeItem("token");
         localStorage.removeItem("user");
         window.location.href = "/";
+        
       }
     } catch (error) {
       console.error("Logout failed:", error);

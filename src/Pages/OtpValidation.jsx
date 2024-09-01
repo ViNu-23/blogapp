@@ -30,17 +30,9 @@ export default function OtpValidation({ email }) {
       .post("/verifyotp", { otp, email })
       .then((response) => {
         if (response.status === 200) {
-          console.log('response',response);
-          console.log('res data',response.data);
-          
-          
           const { avatar, name, email, location } = response.data.user;
-          const {token}= response.data
-          console.log("tkn",token);
-          
+
           sessionStorage.setItem("token", response.data.token); 
-          console.log('token',response.data.token);
-          
           localStorage.setItem(
             "user",
             JSON.stringify({ avatar, name, email, location })
@@ -50,7 +42,7 @@ export default function OtpValidation({ email }) {
       })
       .catch((error) => {
         popupNotification(error.response.data);
-        console.log("error", error.response.data);
+        console.log("error from /verifyotp", error);
       });
   };
 
