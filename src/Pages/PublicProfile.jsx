@@ -3,11 +3,28 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaShare } from "react-icons/fa";
 import { FaUserXmark } from "react-icons/fa6";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function PublicProfile() {
   const [data, setData] = useState(null);
   const { id } = useParams();
   const [error, setError] = useState(null);
+
+  function popupNotification(message, type) {
+    return toast[type](message, {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  }
+
   useEffect(() => {
     axios
       .get(`/publicprofile/${id}`)
@@ -22,6 +39,19 @@ export default function PublicProfile() {
       });
   }, [id]);
 
+  function handleshareProfile(e,id) {
+    e.preventDefault();
+    let url = `https://blog-frontend-vijay.vercel.app/profile/${id}`
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        popupNotification("Link Copied", "success");
+      })
+      .catch((err) => {
+        popupNotification(err, "error");
+      });
+  }
+
   if (!data)
     return (
       <div>
@@ -33,6 +63,7 @@ export default function PublicProfile() {
         )}
       </div>
     );
+
 
   return (
     <div className="min-h-screen w-full bg-slate-900 text-white flex flex-col md:flex-row p-6">
@@ -74,10 +105,10 @@ export default function PublicProfile() {
           </svg>
           <span className="ml-2">{data.location}</span>
         </div>
-        <div className="bg-gray-700 bg-opacity-10 items-center my-3 px-4 py-3 rounded-lg flex hover:text-sky-400 cursor-pointer">
+        <button onClick={(e)=>handleshareProfile(e,(data.email))} className="bg-gray-700 bg-opacity-10 items-center my-3 px-4 py-3 rounded-lg flex hover:text-sky-400 cursor-pointer">
           <FaShare size={18} />
-          <span className="ml-2"> Profile</span>
-        </div>
+          <span className="ml-2">Profile</span>
+        </button>
       </div>
 
       {data.posts.length > 0 && (
@@ -104,6 +135,7 @@ export default function PublicProfile() {
           ))}
         </div>
       )}
+      <ToastContainer/>
     </div>
   );
 }
