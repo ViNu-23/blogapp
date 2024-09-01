@@ -16,6 +16,7 @@ import NotFoundPage from "./Pages/NotFoundPage";
 import PublicProfile from "./Pages/PublicProfile";
 import axios from "axios";
 import EditPost from "./Pages/EditPost";
+import UserLovedPosts from "./Pages/UserLovedPosts";
 
 // axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.baseURL = "https://blog-app-backend-green.vercel.app";
@@ -57,6 +58,8 @@ function App() {
         <Route path="/create" element={<CreatePost />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/editpost/:id" element={<EditPost />} />
+        <Route path="/likedpost" element={<UserLovedPosts />} />
+
       </Routes>
     </>
   );

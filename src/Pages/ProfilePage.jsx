@@ -4,7 +4,7 @@ import UserPosts from "./UserPosts";
 import { FaShare } from "react-icons/fa";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 export default function ProfilePage() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -37,7 +37,7 @@ export default function ProfilePage() {
     const formData = new FormData();
     formData.append("avatar", selectedFile);
 
-    await axios
+     await axios
       .post("/setavatar", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -45,15 +45,21 @@ export default function ProfilePage() {
         withCredentials: true,
       })
       .then((response) => {
+
         if (response.status === 200) {
           const user = JSON.parse(localStorage.getItem("user")) || {};
           user.avatar = response.data;
           localStorage.setItem("user", JSON.stringify(user));
           setProfilePic(response.data);
+          popupNotification("Avatar changed Successfully", "success");
+
+        }else{
+          popupNotification("Failed to set avatar. Please try again", "error");
         }
       })
       .catch((error) => {
         console.log(error);
+        popupNotification(error, "error");
       });
   };
 
@@ -157,7 +163,7 @@ export default function ProfilePage() {
 
             <span className="ml-2">My blogs</span>
           </div>
-          <div className="bg-gray-100 bg-opacity-10 my-3 px-4 py-3 rounded-lg flex cursor-pointer hover:text-red-400">
+          <Link to='/likedpost' className="bg-gray-100 bg-opacity-10 my-3 px-4 py-3 rounded-lg flex cursor-pointer hover:text-red-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -168,7 +174,7 @@ export default function ProfilePage() {
             </svg>
 
             <span className="ml-2">Loved Blogs</span>
-          </div>
+          </Link>
           <button
             onClick={handleshareProfile}
             className="bg-gray-100 bg-opacity-10 items-center my-3 px-4 py-3 rounded-lg flex hover:text-sky-400 cursor-pointer w-full"
