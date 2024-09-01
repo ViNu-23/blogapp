@@ -105,7 +105,7 @@ export default function PublicProfile() {
           </svg>
           <span className="ml-2">{data.location}</span>
         </div>
-        <button onClick={(e)=>handleshareProfile(e,(data.email))} className="bg-gray-700 bg-opacity-10 items-center my-3 px-4 py-3 rounded-lg flex hover:text-sky-400 cursor-pointer">
+        <button onClick={(e)=>handleshareProfile(e,(data.email))} className="w-full bg-gray-700 bg-opacity-10 items-center my-3 px-4 py-3 rounded-lg flex hover:text-sky-400 cursor-pointer">
           <FaShare size={18} />
           <span className="ml-2">Profile</span>
         </button>
