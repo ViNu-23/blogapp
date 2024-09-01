@@ -13,6 +13,7 @@ export default function NavbarPage() {
   const searchBar = location.pathname === "/" || location.pathname === "/";
   const newPost = location.pathname === "/create";
   const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
 
   function handleCreatePost() {
     if (user) {
@@ -115,7 +116,7 @@ console.log('use effect from navigation bar');
             </button>
           </li>
         )}
-        {user ? (
+        {token ? (
           <>
             <div className="relative cursor-pointer">
             <svg

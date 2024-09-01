@@ -41,6 +41,7 @@ export default function ProfilePage() {
       .post("/setavatar", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+           Authorization: `Bearer ${token}`
         },
         withCredentials: true,
       })
