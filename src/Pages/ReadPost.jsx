@@ -12,6 +12,8 @@ export default function ReadPost() {
   useEffect(() => {
     axios.get(`/readpost/${id}`).then((response) => {
       setPost(response.data);
+      window.scrollTo({ top: 0 }); 
+
     });
   }, []);
 

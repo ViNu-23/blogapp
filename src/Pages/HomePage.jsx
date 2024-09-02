@@ -42,14 +42,14 @@ export default function HomePage() {
   const handleNext = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" }); 
+      window.scrollTo({ top: 0 }); 
     }
   };
 
   const handlePrev = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      window.scrollTo({ top: 0, behavior: "smooth" }); 
+      window.scrollTo({ top: 0 }); 
     }
   };
 
