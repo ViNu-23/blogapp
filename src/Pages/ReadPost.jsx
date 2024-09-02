@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { format } from "date-fns";
 import LovedBy from "./LovedBy";
+import { FaArrowCircleLeft } from "react-icons/fa";
 
 export default function ReadPost() {
   const { id } = useParams();
@@ -13,7 +14,6 @@ export default function ReadPost() {
     axios.get(`/readpost/${id}`).then((response) => {
       setPost(response.data);
       window.scrollTo({ top: 0 }); 
-
     });
   }, []);
 
@@ -37,6 +37,9 @@ export default function ReadPost() {
     <div className=" min-h-screen bg-slate-900 text-white px-6 py-4">
       {post && (
         <div>
+         <Link className="inline-flex" to='/'>
+  <FaArrowCircleLeft size={24} className="cursor-pointer hover:text-sky-400"/>
+</Link>
           <div className="flex justify-center mt-4 relative">
             <img
               src={post.image}

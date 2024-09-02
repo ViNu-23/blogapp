@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -6,6 +7,8 @@ import { format } from "date-fns";
 import { TbWifiOff } from "react-icons/tb";
 import { FaHeart } from "react-icons/fa";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -15,6 +18,42 @@ export default function HomePage() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search") || "";
+
+  function popupNotification(message, type) {
+    return toast[type](message, {
+      position: "bottom-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  }
+
+  useEffect(() => {
+    const searchPost = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.post(`/search`, {
+          search: searchQuery,
+          page: currentPage,
+          limit: 6, 
+        });
+        setPosts(response.data.posts);
+        setTotalPages(response.data.totalPages);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        popupNotification("Error while fetching posts", "error");
+      } finally {
+        setLoading(false);
+      }
+    };
+    searchPost();
+  }, [searchQuery, currentPage]);
+  
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -29,27 +68,20 @@ export default function HomePage() {
         setLoading(false);
       }
     };
-
     fetchPosts();
   }, [currentPage]);
-
-  const filteredPosts = posts.filter(
-    (post) =>
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handleNext = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
-      window.scrollTo({ top: 0 }); 
+      window.scrollTo({ top: 0 });
     }
   };
 
   const handlePrev = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      window.scrollTo({ top: 0 }); 
+      window.scrollTo({ top: 0 });
     }
   };
 
@@ -74,9 +106,9 @@ export default function HomePage() {
       <div className="flex flex-wrap justify-around">
         {loading ? (
           <ReloadPage />
-        ) : filteredPosts.length > 0 ? (
+        ) : posts.length > 0 ? (
           <>
-            {filteredPosts.map((post, i) => (
+            {posts.map((post, i) => (
               <Link
                 to={`/read/${post._id}`}
                 key={i}
@@ -133,23 +165,25 @@ export default function HomePage() {
               </Link>
             ))}
             <div className="flex gap-6 items-center my-4 w-full justify-center">
-              {currentPage > 1 && (
-                <button
-                  onClick={handlePrev}
-                  disabled={currentPage === 1}
-                  className="flex items-center justify-center px-3 w-28 py-1 bg-sky-400 rounded-lg"
-                >
-                  <GrFormPrevious size={20} /> Previous
-                </button>
-              )}
-              <button
-                onClick={handleNext}
-                disabled={currentPage === totalPages}
-                className="flex items-center justify-center  px-3 w-28 py-1 bg-sky-400 rounded-lg"
-              >
-                Next <GrFormNext size={20} />
-              </button>
-            </div>
+  {currentPage > 1 && (
+    <button
+      onClick={handlePrev}
+      disabled={currentPage === 1}
+      className="flex items-center justify-center px-3 w-28 py-1 bg-sky-400 rounded-lg"
+    >
+      <GrFormPrevious size={20} /> Previous
+    </button>
+  )}
+  {currentPage < totalPages && ( // Only render the "Next" button if not on the last page
+    <button
+      onClick={handleNext}
+      disabled={currentPage === totalPages}
+      className="flex items-center justify-center px-3 w-28 py-1 bg-sky-400 rounded-lg"
+    >
+      Next <GrFormNext size={20} />
+    </button>
+  )}
+</div>
           </>
         ) : (
           <div className="flex-col justify-center  items-center">
@@ -160,6 +194,7 @@ export default function HomePage() {
           </div>
         )}
       </div>
+      <ToastContainer/>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NotificationPage from "./NotificationPage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function NavbarPage() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -34,9 +34,6 @@ export default function NavbarPage() {
       });
     }
   }
-  useEffect(() => {
-    console.log("use effect from navigation bar");
-  }, []);
 
   function handleSearchSubmit(event) {
     event.preventDefault();
@@ -48,14 +45,15 @@ export default function NavbarPage() {
   return (
     <div className="bg-slate-900 px-6 py-4 border-b-[1px] border-slate-700">
       <ul className="text-white flex justify-between items-center w-full">
-        <Link to="/" className="flex items-center md:w-2/6">
+        <Link to="/" className="flex items-center md:w-2/6 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className="size-6 hover:text-sky-400"
+
           >
             <path
               strokeLinecap="round"
