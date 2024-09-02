@@ -5,7 +5,7 @@ import ReloadPage from "./ReloadPage";
 import { format } from "date-fns";
 import { TbWifiOff } from "react-icons/tb";
 import { FaHeart } from "react-icons/fa";
-import { GrFormPrevious,GrFormNext } from "react-icons/gr";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -42,12 +42,14 @@ export default function HomePage() {
   const handleNext = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" }); 
     }
   };
 
   const handlePrev = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" }); 
     }
   };
 
@@ -73,60 +75,82 @@ export default function HomePage() {
         {loading ? (
           <ReloadPage />
         ) : filteredPosts.length > 0 ? (
-          filteredPosts.map((post, i) => (
-            <Link
-              to={`/read/${post._id}`}
-              key={i}
-              className="w-full md:w-1/3 p-2 relative"
-            >
-              <div className="cursor-pointer hover:scale-[1.010] transition-transform duration-200 p-4 rounded-xl bg-white bg-opacity-[0.05] backdrop-blur-[5px] border border-white border-opacity-[0.18]">
-                <div className="h-48">
-                  <img
-                    className="rounded-xl object-cover h-full w-full"
-                    src={post.image}
-                    alt="img"
-                  />
-                </div>
-                <h1 className="truncate font-semibold my-2 text-lg text-sky-400">
-                  {post.title}
-                </h1>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="h-10 w-10 rounded-lg">
-                      <img
-                        className="rounded-lg object-cover h-full w-full"
-                        src={post.owner?.avatar || "path/to/default/avatar.jpg"}
-                        alt="img"
-                      />
-                    </div>
-                    <div className="ml-2">
-                      <div className="flex items-center">
-                        <h1 className="text-base font-semibold">
-                          {post.owner?.name || "Anonymous"}
-                        </h1>
-                        <span className="ml-1 text-sky-400">
-                          {/* SVG Icon */}
-                        </span>
+          <>
+            {filteredPosts.map((post, i) => (
+              <Link
+                to={`/read/${post._id}`}
+                key={i}
+                className="w-full md:w-1/3 p-2 relative"
+              >
+                <div className="cursor-pointer hover:scale-[1.010] transition-transform duration-200 p-4 rounded-xl bg-white bg-opacity-[0.05] backdrop-blur-[5px] border border-white border-opacity-[0.18]">
+                  <div className="h-48">
+                    <img
+                      className="rounded-xl object-cover h-full w-full"
+                      src={post.image}
+                      alt="img"
+                    />
+                  </div>
+                  <h1 className="truncate font-semibold my-2 text-lg text-sky-400">
+                    {post.title}
+                  </h1>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="h-10 w-10 rounded-lg">
+                        <img
+                          className="rounded-lg object-cover h-full w-full"
+                          src={
+                            post.owner?.avatar || "path/to/default/avatar.jpg"
+                          }
+                          alt="img"
+                        />
                       </div>
-                      <p className="text-sm font-light">
-                        {formatDate(post.date)}
-                      </p>
+                      <div className="ml-2">
+                        <div className="flex items-center">
+                          <h1 className="text-base font-semibold">
+                            {post.owner?.name || "Anonymous"}
+                          </h1>
+                          <span className="ml-1 text-sky-400">
+                            {/* SVG Icon */}
+                          </span>
+                        </div>
+                        <p className="text-sm font-light">
+                          {formatDate(post.date)}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button className="flex items-center bg-slate-600 bg-opacity-10 px-3 py-2 text-sm leading-5 rounded-lg font-semibold text-sky-400">
-                      #{post.category}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button className="flex items-center bg-slate-600 bg-opacity-10 px-3 py-2 text-sm leading-5 rounded-lg font-semibold text-sky-400">
+                        #{post.category}
+                      </button>
 
-                    <div className="text-red-400 flex items-center justify-center gap-1">
-                      <p className="text-lg">{post.lovedBy.length}</p>
-                      <FaHeart size={17} />
+                      <div className="text-red-400 flex items-center justify-center gap-1">
+                        <p className="text-lg">{post.lovedBy.length}</p>
+                        <FaHeart size={17} />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))
+              </Link>
+            ))}
+            <div className="flex gap-6 items-center my-4 w-full justify-center">
+              {currentPage > 1 && (
+                <button
+                  onClick={handlePrev}
+                  disabled={currentPage === 1}
+                  className="flex items-center justify-center px-3 w-28 py-1 bg-sky-400 rounded-lg"
+                >
+                  <GrFormPrevious size={20} /> Previous
+                </button>
+              )}
+              <button
+                onClick={handleNext}
+                disabled={currentPage === totalPages}
+                className="flex items-center justify-center  px-3 w-28 py-1 bg-sky-400 rounded-lg"
+              >
+                Next <GrFormNext size={20} />
+              </button>
+            </div>
+          </>
         ) : (
           <div className="flex-col justify-center  items-center">
             <h1 className="flex justify-center">
@@ -135,16 +159,6 @@ export default function HomePage() {
             <p> Connection lost !</p>
           </div>
         )}
-      </div>
-      <div className="flex gap-6 items-center my-4 w-full justify-center">
-        {currentPage > 1 &&(
-          <button onClick={handlePrev} disabled={currentPage === 1} className="flex items-center justify-center px-3 w-28 py-1 bg-sky-400 rounded-lg">
-          <GrFormPrevious size={20}/> Previous
-         </button>
-        )}
-        <button onClick={handleNext} disabled={currentPage === totalPages} className="flex items-center justify-center  px-3 w-28 py-1 bg-sky-400 rounded-lg">
-        Next <GrFormNext size={20}/>
-         </button>
       </div>
     </div>
   );
