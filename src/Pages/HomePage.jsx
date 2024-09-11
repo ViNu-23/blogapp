@@ -7,8 +7,6 @@ import { format } from "date-fns";
 import { TbWifiOff } from "react-icons/tb";
 import { FaHeart } from "react-icons/fa";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
-import { Bounce, ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
@@ -19,19 +17,7 @@ export default function HomePage() {
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search") || "";
 
-  function popupNotification(message, type) {
-    return toast[type](message, {
-      position: "bottom-center",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-    });
-  }
+
 
   useEffect(() => {
     const searchPost = async () => {
@@ -46,7 +32,6 @@ export default function HomePage() {
         setTotalPages(response.data.totalPages);
       } catch (error) {
         console.error("Error fetching posts:", error);
-        popupNotification("Error while fetching posts", "error");
       } finally {
         setLoading(false);
       }
@@ -102,7 +87,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className="w-full min-h-screen px-4 py-8 bg-slate-900 text-white">
+    <div className="w-full min-h-screen px-4 py-8 bg-slate-900 text-white"
+    style={{ backgroundImage: 'url(pattern.svg)', backgroundPosition: 'center',backgroundRepeat:'repeat-x'}}
+    >
       <div className="flex flex-wrap justify-around">
         {loading ? (
           <ReloadPage />
@@ -194,7 +181,6 @@ export default function HomePage() {
           </div>
         )}
       </div>
-      <ToastContainer/>
     </div>
   );
 }

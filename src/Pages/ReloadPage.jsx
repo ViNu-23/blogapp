@@ -1,6 +1,6 @@
 export default function ReloadPage() {
   return (
-    <div className="w-full min-h-screen  bg-slate-900 text-white">
+    <div className="w-full min-h-screen text-white">
       <div className="flex flex-wrap justify-around">
         {[...Array(6)].map((_, index) => (
           <div
