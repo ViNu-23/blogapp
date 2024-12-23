@@ -17,8 +17,6 @@ export default function HomePage() {
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search") || "";
 
-
-
   useEffect(() => {
     const searchPost = async () => {
       setLoading(true);
@@ -88,7 +86,7 @@ export default function HomePage() {
 
   return (
     <div className="w-full min-h-screen px-4 py-8 bg-slate-900 text-white"
-    style={{ backgroundImage: 'url(pattern.svg)', backgroundPosition: 'center',backgroundRepeat:'repeat-x'}}
+    
     >
       <div className="flex flex-wrap justify-around">
         {loading ? (
